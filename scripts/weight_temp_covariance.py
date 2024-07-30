@@ -13,7 +13,7 @@ def mean(array):
 #
 # Returns covariance of 2 equal size arrays
 #
-def covariance(a,b):
+def cov(a,b):
     assert len(a) == len(b)
     sum = 0
     mean_a = mean(a)
@@ -26,10 +26,17 @@ def main():
     csv_file_path = "../field_data/july11_to_july17_2024.csv"
     data_file = pd.read_csv(csv_file_path)
 
-    temp_series = data_file["Temperature"].to_numpy().copy()
-    weight_series = data_file["weight"].to_numpy().copy()
+    t = data_file["Temperature"].to_numpy().copy()
+    w = data_file["weight"].to_numpy().copy()
 
-    print(covariance(temp_series,weight_series))
+
+    cov_matrix = [[cov(t,t), cov(t,w)],
+                  [cov(w,t), cov(w,w)]]
+    
+    w ,v = np.linalg.eig(cov_matrix)
+
+    print("Covariance of Weight and Temperature: ", cov_matrix[0][1])    
+    print("Eigen Values: ", w)
 
 if __name__=="__main__":
     main()
